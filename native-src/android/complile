@@ -1,5 +1,5 @@
 #!/bin/bash
 
-gradle clean exportJar
+./gradlew clean exportJar
 
 cp app/release/pushplugin.jar ../../platforms/android/libs
