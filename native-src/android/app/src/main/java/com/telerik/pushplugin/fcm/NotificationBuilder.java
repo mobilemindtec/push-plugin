@@ -1,4 +1,4 @@
-package com.telerik.pushplugin;
+package com.telerik.pushplugin.fcm;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -8,14 +8,15 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.google.firebase.messaging.RemoteMessage;
 import com.telerik.pushplugin.PushHandlerActivity;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -25,11 +26,12 @@ import java.util.Random;
 public class NotificationBuilder {
     private static final String TAG = "NotificationBuilder";
 
-    public static void createNotification(Context context, Bundle extras) {
+
+    public static void createNotification(Context context, RemoteMessage remoteMessage) {
         int notId = 0;
 
         try {
-            notId = Integer.parseInt(extras.getString("notId"));
+            notId = Integer.parseInt(remoteMessage.getMessageId());
         } catch (NumberFormatException e) {
             Log.e(TAG, "Number format exception - Error parsing Notification ID: " + e.getMessage());
         } catch (Exception e) {
@@ -55,15 +57,18 @@ public class NotificationBuilder {
 
             Intent notificationIntent = new Intent(context, PushHandlerActivity.class);
             notificationIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            notificationIntent.putExtra("pushBundle", extras);
+            notificationIntent.putExtra("pushBundle", remoteMessage);
 
             PendingIntent contentIntent = PendingIntent.getActivity(context, notId, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
             int defaults = Notification.DEFAULT_ALL;
+            Map<String, String> data = remoteMessage.getData();
+            com.google.firebase.messaging.RemoteMessage.Notification notification = remoteMessage.getNotification();
 
-            if (extras.getString("defaults") != null) {
+
+            if (data.containsKey("defaults") && data.get("defaults") != null) {
                 try {
-                    defaults = Integer.parseInt(extras.getString("defaults"));
+                    defaults = Integer.parseInt(data.get("defaults"));
                 } catch (NumberFormatException ignore) {
                 }
             }
@@ -71,27 +76,23 @@ public class NotificationBuilder {
             NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(context)
                             .setDefaults(defaults)
-                            .setSmallIcon(getSmallIcon(context, extras))
+                            .setSmallIcon(getSmallIcon(context, remoteMessage))
                             .setWhen(System.currentTimeMillis())
-                            .setContentTitle(extras.getString("title"))
-                            .setTicker(extras.getString("title"))
+                            .setContentTitle(notification.getTitle())
+                            .setTicker(notification.getTitle())
                             .setContentIntent(contentIntent)
-                            .setColor(getColor(extras))
+                            .setColor(getColor(remoteMessage))
                             .setAutoCancel(true);
 
-            String message = extras.getString("message");
+            String message = remoteMessage.getNotification().getBody();
             if (message != null) {
                 mBuilder.setContentText(message);
             } else {
                 mBuilder.setContentText("<missing message content>");
             }
 
-            String msgcnt = extras.getString("msgcnt");
-            if (msgcnt != null) {
-                mBuilder.setNumber(Integer.parseInt(msgcnt));
-            }
 
-            String soundName = extras.getString("sound");
+            String soundName = remoteMessage.getNotification().getSound();
             if (soundName != null) {
                 Resources r = context.getResources();
                 int resourceId = r.getIdentifier(soundName, "raw", context.getPackageName());
@@ -101,13 +102,13 @@ public class NotificationBuilder {
                 mBuilder.setDefaults(defaults);
             }
 
-            final Notification notification = mBuilder.build();
-            final int largeIcon = getLargeIcon(context, extras);
+            final Notification notify = mBuilder.build();
+            final int largeIcon = getLargeIcon(context, remoteMessage);
             if (largeIcon > -1) {
-                notification.contentView.setImageViewResource(android.R.id.icon, largeIcon);
+                notify.contentView.setImageViewResource(android.R.id.icon, largeIcon);
             }
 
-            mNotificationManager.notify(appName, notId, notification);
+            mNotificationManager.notify(appName, notId, notify);
         } catch (Exception e) {
             StringWriter stackTraceWriter = new StringWriter();
             e.printStackTrace(new PrintWriter(stackTraceWriter));
@@ -125,9 +126,9 @@ public class NotificationBuilder {
         return (String) appName;
     }
 
-    private static int getColor(Bundle extras) {
+    private static int getColor(RemoteMessage remoteMessage) {
         int theColor = 0; // default, transparent
-        final String passedColor = extras.getString("color"); // something like "#FFFF0000", or "red"
+        final String passedColor = remoteMessage.getNotification().getColor(); // something like "#FFFF0000", or "red"
         if (passedColor != null) {
             try {
                 theColor = Color.parseColor(passedColor);
@@ -137,12 +138,12 @@ public class NotificationBuilder {
         return theColor;
     }
 
-    private static int getSmallIcon(Context context, Bundle extras) {
+    private static int getSmallIcon(Context context, RemoteMessage remoteMessage) {
 
         int icon = -1;
 
         // first try an iconname possible passed in the server payload
-        final String iconNameFromServer = extras.getString("smallIcon");
+        final String iconNameFromServer = remoteMessage.getNotification().getIcon();
         if (iconNameFromServer != null) {
             icon = getIconValue(context.getPackageName(), iconNameFromServer);
         }
@@ -160,14 +161,16 @@ public class NotificationBuilder {
         return icon;
     }
 
-    private static int getLargeIcon(Context context, Bundle extras) {
+    private static int getLargeIcon(Context context, RemoteMessage remoteMessage) {
 
         int icon = -1;
 
         // first try an iconname possible passed in the server payload
-        final String iconNameFromServer = extras.getString("largeIcon");
-        if (iconNameFromServer != null) {
-            icon = getIconValue(context.getPackageName(), iconNameFromServer);
+        final String iconNameFromServer = remoteMessage.getData().get("largeIcon");
+        if (remoteMessage.getData().containsKey("largeIcon")) {
+            if (iconNameFromServer != null) {
+                icon = getIconValue(context.getPackageName(), iconNameFromServer);
+            }
         }
 
         // try a custom included icon in our bundle named ic_stat_notify(.png)

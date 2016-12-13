@@ -88,7 +88,7 @@ The code for the Push Plugin for NativeScript.
                 self.set("message", "" + JSON.stringify(data));
             }
         };
-
+        // or pushPlugin.fcmRegister
         pushPlugin.register(iosSettings, function (data) {
             self.set("message", "" + JSON.stringify(data));
 
@@ -139,7 +139,7 @@ The code for the Push Plugin for NativeScript.
         }
 	};
 
-	
+	// or pushPlugin.fcmRegister
 	pushPlugin.register(settings,
 		// Success callback
 		function(token) {
@@ -165,7 +165,7 @@ The code for the Push Plugin for NativeScript.
 > unregister(successCallback, errorCallback, settings)
 
 ```javascript
-
+	// or pushPlugin.fcmUnregister
 	pushPlugin.unregister(
 		// Success callback
 		function(){
@@ -184,6 +184,7 @@ The code for the Push Plugin for NativeScript.
 
 - **Register for interactive push notifications (iOS >= 8.0)** - in order to handle interacitve notifications, you have to pass additional settings while registering your device. The message object in the **notificationCallbackIOS** will contain a property with the value of the identifier.
 
+// or pushPlugin.fcmRegister
 > register(settings, successCallback, errorCallback)
 
 ```javascript
@@ -217,7 +218,7 @@ The code for the Push Plugin for NativeScript.
         }
 	};
 
-	
+	// or pushPlugin.fcmRegister
 	pushPlugin.register(settings,
 		// Success callback
 		function(token){
@@ -294,6 +295,29 @@ In case the application doesn't work as expected. Here are some things you can v
 	    	<action android:name="com.google.android.c2dm.intent.RECEIVE" />
 	    </intent-filter>
 	</service>
+
+	<!-- FCM -->
+  <service
+      android:name="com.telerik.pushplugin.fcm.PushPlugin">
+      <intent-filter>
+          <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+      </intent-filter>
+  </service>
+
+  <service
+      android:name="com.telerik.pushplugin.fcm.FirebaseInstanceIdListenerService">
+      <intent-filter>
+          <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+      </intent-filter>
+  </service>
+
+  <meta-data
+      android:name="com.google.firebase.messaging.default_notification_icon"
+      android:resource="@drawable/ic_stat_notify" />
+
+  <meta-data android:name="com.google.firebase.messaging.default_notification_color"
+      android:resource="@color/white" />
+
 ```
 
 - Ensure that the AndroindManifest.xml located at platforms\android contains the following permissions for push notifications:

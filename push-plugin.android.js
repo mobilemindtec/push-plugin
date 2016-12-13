@@ -9,6 +9,7 @@ module.exports = (function () {
     })();
 
     var pluginObject = {
+        
         register: function (options, successCallback, errorCallback) {
             com.telerik.pushplugin.PushPlugin.register(context, options.senderID,
                 //Success
@@ -19,6 +20,7 @@ module.exports = (function () {
                     })
             );
         },
+
         unregister: function (onSuccessCallback, onErrorCallback, options) {
             com.telerik.pushplugin.PushPlugin.unregister(context, options.senderID, new com.telerik.pushplugin.PushPluginListener(
                 {
@@ -26,6 +28,26 @@ module.exports = (function () {
                 }
             ));
         },
+
+        fcmRegister: function (options, successCallback, errorCallback) {
+            com.telerik.pushplugin.fcm.PushPlugin.register(context, options.senderID,
+                //Success
+                new com.telerik.pushplugin.PushPluginListener(
+                    {
+                        success: successCallback,
+                        error: errorCallback
+                    })
+            );
+        },
+
+        fcmUnregister: function (onSuccessCallback, onErrorCallback, options) {
+            com.telerik.pushplugin.fcm.PushPlugin.unregister(context, options.senderID, new com.telerik.pushplugin.PushPluginListener(
+                {
+                    success: onSuccessCallback
+                }
+            ));
+        },
+
         onMessageReceived: function (callback) {
             com.telerik.pushplugin.PushPlugin.setOnMessageReceivedCallback(
                 new com.telerik.pushplugin.PushPluginListener(
@@ -34,6 +56,7 @@ module.exports = (function () {
                     })
             );
         },
+
         onTokenRefresh : function (callback) {
             com.telerik.pushplugin.PushPlugin.setOnTokenRefreshCallback(
                 new com.telerik.pushplugin.PushPluginListener(
@@ -42,10 +65,12 @@ module.exports = (function () {
                     })
             );
         },
+        
         areNotificationsEnabled : function (callback) {
             var bool = com.telerik.pushplugin.PushPlugin.areNotificationsEnabled();
             callback(bool);
         }
+        
     };
     return pluginObject;
 })();
