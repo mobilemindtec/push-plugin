@@ -5,7 +5,7 @@ import android.util.Log;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 import com.google.firebase.iid.FirebaseInstanceId;
-
+import com.google.firebase.FirebaseApp;
 import java.io.IOException;
 
 /**
@@ -44,7 +44,10 @@ public class ObtainTokenThread extends Thread {
         }
     }
 
-    private String getTokenFromGCM() throws IOException {
+    private String getTokenFromGCM() throws IOException {        
+        
+        Log.d(TAG, "getTokenFromGCM.");
+
         InstanceID instanceID = InstanceID.getInstance(this.appContext);
         this.token = instanceID.getToken(this.projectId,
                 GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
@@ -64,9 +67,11 @@ public class ObtainTokenThread extends Thread {
     }
 
     private String getTokenFromFCM() throws IOException {
+
+        Log.d(TAG, "getTokenFromFCM.");
+
         FirebaseInstanceId instanceId = FirebaseInstanceId.getInstance();
-        this.token = instanceId.getToken(this.projectId,
-                GoogleCloudMessaging.INSTANCE_ID_SCOPE);
+        this.token = instanceId.getToken();
 
         Log.d(TAG, this.token.toString());
 
