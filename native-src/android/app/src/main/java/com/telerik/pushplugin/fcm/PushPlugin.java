@@ -19,7 +19,7 @@ import java.util.Set;
  * in order to receive Notification Messages.
  */
 public class PushPlugin extends FirebaseMessagingService {
-    static final String TAG = "PushPlugin";
+    static final String TAG = "FcmPushPlugin";
 
     static boolean isActive = false;
     private static RemoteMessage cachedData;

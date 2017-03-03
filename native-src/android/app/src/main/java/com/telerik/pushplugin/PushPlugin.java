@@ -12,7 +12,7 @@ import java.util.Set;
  * in order to receive Notification Messages.
  */
 public class PushPlugin extends GcmListenerService {
-    static final String TAG = "PushPlugin";
+    static final String TAG = "GcmPushPlugin";
 
     static boolean isActive = false;
     private static Bundle cachedData;

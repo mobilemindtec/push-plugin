@@ -73,6 +73,9 @@ public class NotificationBuilder {
                 }
             }
 
+            Log.d(TAG, "notification title = " + notification.getTitle());
+            Log.d(TAG, "notification body = " + notification.getBody());
+
             NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(context)
                             .setDefaults(defaults)
@@ -81,18 +84,26 @@ public class NotificationBuilder {
                             .setContentTitle(notification.getTitle())
                             .setTicker(notification.getTitle())
                             .setContentIntent(contentIntent)
-                            .setColor(getColor(remoteMessage))
+                            .setColor(getColor(remoteMessage, context))
                             .setAutoCancel(true);
 
-            String message = remoteMessage.getNotification().getBody();
+
+
+            String message = notification.getBody();
             if (message != null) {
-                mBuilder.setContentText(message);
+                if(message.length() > 30){
+                    mBuilder.setContentText(message.substring(0, 30) + "..")
+                        .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(message));
+                }else{
+                    mBuilder.setContentText(message);
+                }
             } else {
                 mBuilder.setContentText("<missing message content>");
             }
 
 
-            String soundName = remoteMessage.getNotification().getSound();
+            String soundName = notification.getSound();
             if (soundName != null) {
                 Resources r = context.getResources();
                 int resourceId = r.getIdentifier(soundName, "raw", context.getPackageName());
@@ -126,7 +137,7 @@ public class NotificationBuilder {
         return (String) appName;
     }
 
-    private static int getColor(RemoteMessage remoteMessage) {
+    private static int getColor(RemoteMessage remoteMessage, Context context) {
         int theColor = 0; // default, transparent
         final String passedColor = remoteMessage.getNotification().getColor(); // something like "#FFFF0000", or "red"
         if (passedColor != null) {
@@ -135,6 +146,19 @@ public class NotificationBuilder {
             } catch (IllegalArgumentException ignore) {
             }
         }
+
+        try{
+
+            int defaultColor = context.getResources().getIdentifier("ic_stat_notify_color", "color", context.getPackageName());
+            Log.d(TAG, "use defaultColor  " + defaultColor);
+            if(defaultColor > -1)
+                theColor = context.getResources().getColor(defaultColor);
+        }catch(Exception e){
+            StringWriter stackTraceWriter = new StringWriter();
+            e.printStackTrace(new PrintWriter(stackTraceWriter));            
+            Log.d(TAG, "Exception has been raised: " + e.getMessage() + " and stack trace: " + stackTraceWriter.toString());
+        }
+
         return theColor;
     }
 
@@ -179,9 +203,9 @@ public class NotificationBuilder {
         }
 
         // fall back to the regular app icon
-        if (icon == -1) {
-            icon = context.getApplicationInfo().icon;
-        }
+        //if (icon == -1) {
+        //    icon = context.getApplicationInfo().icon;
+        //}
 
         return icon;
     }

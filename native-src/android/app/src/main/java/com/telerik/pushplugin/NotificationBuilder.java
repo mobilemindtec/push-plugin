@@ -81,7 +81,13 @@ public class NotificationBuilder {
 
             String message = extras.getString("message");
             if (message != null) {
-                mBuilder.setContentText(message);
+                if(message.length() > 30){
+                    mBuilder.setContentText(message.substring(0, 30) + "..")
+                        .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(message));
+                }else{
+                    mBuilder.setContentText(message);
+                }
             } else {
                 mBuilder.setContentText("<missing message content>");
             }
