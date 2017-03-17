@@ -39,9 +39,6 @@ module.exports = (function() {
         },
         register: function(settings, success, error) {
 
-            console.log("this = " + this)
-            console.log("this._init = " + this._init)
-
             this._init(settings);
 
             var self = this;
