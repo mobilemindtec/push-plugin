@@ -9,8 +9,14 @@ module.exports = (function () {
     })();
 
     var pluginObject = {
-        
+
         register: function (options, successCallback, errorCallback) {
+
+            if(options && options.androidFcm){
+              this.fcmRegister(options, successCallback, errorCallback)
+              return
+            }
+
             com.telerik.pushplugin.PushPlugin.register(context, options.senderID,
                 //Success
                 new com.telerik.pushplugin.PushPluginListener(
@@ -22,6 +28,12 @@ module.exports = (function () {
         },
 
         unregister: function (onSuccessCallback, onErrorCallback, options) {
+
+            if(options && options.androidFcm){
+              this.fcmUnregister(options, successCallback, errorCallback)
+              return
+            }
+
             com.telerik.pushplugin.PushPlugin.unregister(context, options.senderID, new com.telerik.pushplugin.PushPluginListener(
                 {
                     success: onSuccessCallback
@@ -65,12 +77,12 @@ module.exports = (function () {
                     })
             );
         },
-        
+
         areNotificationsEnabled : function (callback) {
             var bool = com.telerik.pushplugin.PushPlugin.areNotificationsEnabled();
             callback(bool);
         }
-        
+
     };
     return pluginObject;
 })();
