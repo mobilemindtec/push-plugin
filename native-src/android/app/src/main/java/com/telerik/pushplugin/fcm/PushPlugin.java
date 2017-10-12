@@ -21,7 +21,7 @@ import java.util.Set;
 public class PushPlugin extends FirebaseMessagingService {
     static final String TAG = "FcmPushPlugin";
 
-    static boolean isActive = false;
+    public static boolean isActive = false;
     private static RemoteMessage cachedData;
     private static PushPluginListener onMessageReceivedCallback;
     private static PushPluginListener onTokenRefreshCallback;
@@ -131,8 +131,10 @@ public class PushPlugin extends FirebaseMessagingService {
         // If the application has the callback registered and it must be active
         // execute the callback. Otherwise, create new notification in the notification bar of the user.
         if (onMessageReceivedCallback != null && isActive) {
+            Log.d(TAG, "execute message callback");
             executeOnMessageReceivedCallback(remoteMessage);
         } else {
+            Log.d(TAG, "not message callback, execute notification builder");
             Context context = getApplicationContext();
             NotificationBuilder.createNotification(context, remoteMessage);
         }

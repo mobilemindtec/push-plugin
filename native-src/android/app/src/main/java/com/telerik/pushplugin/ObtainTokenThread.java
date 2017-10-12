@@ -63,6 +63,7 @@ public class ObtainTokenThread extends Thread {
 
         // TODO: Wrap the whole callback.
         PushPlugin.isActive = true;
+        com.telerik.pushplugin.fcm.PushPlugin.isActive = true;
         return this.token;
     }
 
@@ -84,6 +85,7 @@ public class ObtainTokenThread extends Thread {
 
         // TODO: Wrap the whole callback.
         PushPlugin.isActive = true;
+        com.telerik.pushplugin.fcm.PushPlugin.isActive = true;
         return this.token;
     }
 

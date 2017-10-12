@@ -81,7 +81,30 @@ module.exports = (function () {
         areNotificationsEnabled : function (callback) {
             var bool = com.telerik.pushplugin.PushPlugin.areNotificationsEnabled();
             callback(bool);
-        }
+        },
+
+        fcmOnMessageReceived: function (callback) {
+            com.telerik.pushplugin.fcm.PushPlugin.setOnMessageReceivedCallback(
+                new com.telerik.pushplugin.PushPluginListener(
+                    {
+                        success: callback
+                    })
+            );
+        },
+
+        fcmOnTokenRefresh : function (callback) {
+            com.telerik.pushplugin.fcm.PushPlugin.setOnTokenRefreshCallback(
+                new com.telerik.pushplugin.PushPluginListener(
+                    {
+                        success: callback
+                    })
+            );
+        },
+
+        fcmAreNotificationsEnabled : function (callback) {
+            var bool = com.telerik.pushplugin.fcm.PushPlugin.areNotificationsEnabled();
+            callback(bool);
+        }        
 
     };
     return pluginObject;
