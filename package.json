@@ -1,7 +1,7 @@
 { 
   "name" : "nativescript-push-notifications",
   "version": "0.0.15",
-  "main" : "push-plugin.js",
+  "main" : "index.js",
   "nativescript": {
     "platforms": {
       "ios": "3.0.0",
