@@ -52,7 +52,7 @@ public class ObtainTokenThread extends Thread {
         this.token = instanceID.getToken(this.projectId,
                 GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
 
-        Log.d(TAG, this.token.toString());
+        Log.d(TAG, ""+this.token);
 
         if(callbacks != null) {
             Log.d(TAG, "Calling listener callback with token: " + token);
@@ -74,7 +74,7 @@ public class ObtainTokenThread extends Thread {
         FirebaseInstanceId instanceId = FirebaseInstanceId.getInstance();
         this.token = instanceId.getToken();
 
-        Log.d(TAG, this.token.toString());
+        Log.d(TAG, ""+this.token);
 
         if(callbacks != null) {
             Log.d(TAG, "Calling listener callback with token: " + token);
