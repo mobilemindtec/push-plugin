@@ -54,7 +54,7 @@ public class UnregisterTokenThread extends Thread {
         }
 
         // TODO: Wrap the whole callback.
-        PushPlugin.isActive = false;
+        PushPlugin.isActive = false;        
     }
 
     private void deleteTokenFromFCM() throws IOException {
@@ -69,6 +69,6 @@ public class UnregisterTokenThread extends Thread {
         }
 
         // TODO: Wrap the whole callback.
-        PushPlugin.isActive = false;
+        com.telerik.pushplugin.fcm.PushPlugin.isActive = false;
     }
 }
