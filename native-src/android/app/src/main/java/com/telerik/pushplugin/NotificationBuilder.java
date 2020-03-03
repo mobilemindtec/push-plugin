@@ -9,10 +9,9 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import com.telerik.pushplugin.PushHandlerActivity;
+import androidx.core.app.NotificationCompat;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

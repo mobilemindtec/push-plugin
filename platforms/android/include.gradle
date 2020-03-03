@@ -7,7 +7,6 @@ android {
 }
 
 dependencies {
-  compile 'com.google.android.gms:play-services-gcm:11.0.2'
-  compile 'com.google.firebase:firebase-core:11.0.2'
-  compile 'com.google.firebase:firebase-messaging:11.0.2'
+  implementation 'com.google.firebase:firebase-core:16.0.8'
+  implementation 'com.google.firebase:firebase-messaging:17.4.0'
 }
