@@ -47,16 +47,16 @@ dependencies {
 }
 
 task deleteOldJar(type: Delete) {
-    delete 'build/intermediates/bundles/release/pushplugin.jar'
+    delete 'build/outputs/aar/pushplugin.aar'
 }
 
 
 task exportJar(type: Copy) {
-    from('build/intermediates/bundles/release/')
-    into('release')
-    include('classes.jar')
+    from('build/outputs')
+    into('aar')
+    include('app-release.aar')
     // name the plugin
-    rename('classes.jar','pushplugin.jar')
+    rename('app-release.aar','pushplugin.aar')
 }
 
 exportJar.dependsOn(deleteOldJar, build)
