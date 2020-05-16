@@ -1,7 +1,6 @@
 package com.telerik.pushplugin;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -10,7 +9,6 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.telerik.pushplugin.fcm.PushPlugin;
 
-import java.io.IOException;
 
 /**
  * Responsible for obtaining a Token from the GCM service.
@@ -60,7 +58,7 @@ public class ObtainTokenThread {
         FirebaseInstanceId.getInstance().getInstanceId()
                 .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
                     @Override
-                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                    public void onComplete(Task<InstanceIdResult> task) {
                         if (!task.isSuccessful()) {
                             callbacks.error("Error while retrieving a token: " + task.getException().getMessage());
                             Log.w(TAG, "getInstanceId failed", task.getException());

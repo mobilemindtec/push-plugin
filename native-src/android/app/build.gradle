@@ -52,7 +52,7 @@ task deleteOldJar(type: Delete) {
 
 
 task exportJar(type: Copy) {
-    from('build/outputs')
+        from('build/outputs')
     into('aar')
     include('app-release.aar')
     // name the plugin
