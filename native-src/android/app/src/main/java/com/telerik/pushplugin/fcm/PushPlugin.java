@@ -1,6 +1,7 @@
 package com.telerik.pushplugin.fcm;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -19,10 +20,11 @@ import java.util.Set;
  * in order to receive Notification Messages.
  */
 public class PushPlugin extends FirebaseMessagingService {
-    static final String TAG = "FcmPushPlugin";
+    public static final String TAG = "FcmPushPlugin";
 
     public static boolean isActive = false;
     private static RemoteMessage cachedData;
+    private static Bundle cachedData2;
     private static PushPluginListener onMessageReceivedCallback;
     private static PushPluginListener onTokenRefreshCallback;
 
@@ -39,8 +41,8 @@ public class PushPlugin extends FirebaseMessagingService {
         }
 
         try {
-            ObtainTokenThread t = new ObtainTokenThread(true, projectId, appContext, callbacks);
-            t.start();
+            ObtainTokenThread t = new ObtainTokenThread(projectId, appContext, callbacks);
+            t.run();
         } catch (Exception ex) {
             callbacks.error("Thread failed to start: " + ex.getMessage());
         }
@@ -58,7 +60,7 @@ public class PushPlugin extends FirebaseMessagingService {
             Log.d(TAG, "Unregister without providing a callback!");
         }
         try {
-            UnregisterTokenThread t = new UnregisterTokenThread(true, projectId, appContext, callbacks);
+            UnregisterTokenThread t = new UnregisterTokenThread(projectId, appContext, callbacks);
             t.start();
         } catch (Exception ex) {
             callbacks.error("Thread failed to start: " + ex.getMessage());
@@ -76,6 +78,11 @@ public class PushPlugin extends FirebaseMessagingService {
         if (cachedData != null) {
             executeOnMessageReceivedCallback(cachedData);
             cachedData = null;
+        }
+
+        if (cachedData2 != null) {
+            executeOnMessageReceivedCallback2(cachedData2);
+            cachedData2 = null;
         }
     }
 
@@ -119,6 +126,32 @@ public class PushPlugin extends FirebaseMessagingService {
         } else {
             Log.d(TAG, "No callback function - caching the data for later retrieval.");
             cachedData = remoteMessage;
+        }
+    }
+
+    /**
+     * Execute the onMessageReceivedCallback with the data passed.
+     * In case the callback is not present, cache the data;
+     *
+     * @param data
+     */
+    public static void executeOnMessageReceivedCallback2(Bundle data) {
+        if (onMessageReceivedCallback != null) {
+            Log.d(TAG, "Sending message to client: " + data.getString("message"));
+            JsonObjectExtended dataAsJson = new JsonObjectExtended();
+            Set<String> keys = data.keySet();
+            for (String key : keys) {
+                try {
+                    dataAsJson.put(key, JsonObjectExtended.wrap(data.get(key)));
+                } catch(JSONException e) {
+                    Log.d(TAG, "Error thrown while parsing push notification data bundle to json: " + e.getMessage());
+                    //Handle exception here
+                }
+            }
+            onMessageReceivedCallback.success(data.getString("message"), dataAsJson.toString());
+        } else {
+            Log.d(TAG, "No callback function - caching the data for later retrieval.");
+            cachedData2 = data;
         }
     }
 

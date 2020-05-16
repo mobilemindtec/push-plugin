@@ -6,6 +6,8 @@ import android.app.Application;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.telerik.pushplugin.fcm.PushPlugin;
+
 /**
  * Subscribe to the Pause and Resume activity events in order to toggle the PushPlugin's status.
  * When the PushPlugin is not in active state - i.e. at foreground, notifications should be created

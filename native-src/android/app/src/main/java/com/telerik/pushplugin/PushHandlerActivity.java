@@ -8,6 +8,8 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.telerik.pushplugin.fcm.PushPlugin;
+
 /**
  * Activity which is an entry point, whenever a notification from the bar is tapped and executed.
  * The activity fires, notifies the callback.
@@ -55,7 +57,7 @@ public class PushHandlerActivity extends Activity {
             originalExtras.putBoolean("foreground", false);
             originalExtras.putBoolean("coldstart", !isPushPluginActive);
 
-            PushPlugin.executeOnMessageReceivedCallback(originalExtras);
+            PushPlugin.executeOnMessageReceivedCallback2(originalExtras);
         }
     }
 

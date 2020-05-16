@@ -21,10 +21,27 @@ android {
 
 dependencies {
 
+    def androidXLegacyVersion = "1.0.0"
+    if (project.hasProperty("androidXLegacy")) {
+        androidXLegacyVersion = androidXLegacy
+    }
 
-    implementation 'com.google.android.gms:play-services-gcm:17.0.0'
-  implementation 'com.google.firebase:firebase-core:16.0.8'
-  implementation 'com.google.firebase:firebase-messaging:17.4.0'
+    def androidXAppCompatVersion = "1.0.2"
+    if (project.hasProperty("androidXAppCompat")) {
+        androidXAppCompatVersion = androidXAppCompat
+    }
+
+    def androidXMaterialVersion = "1.0.0"
+    if (project.hasProperty("androidXMaterial")) {
+        androidXMaterialVersion = androidXMaterial
+    }
+
+    implementation "androidx.appcompat:appcompat:$androidXAppCompatVersion"
+    //implementation "com.google.android.material:material:$androidXMaterialVersion"
+
+    //implementation 'com.google.android.gms:play-services-gcm:17.0.0'
+    implementation 'com.google.firebase:firebase-core:16.0.8'
+    implementation 'com.google.firebase:firebase-messaging:17.4.0'
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 }
