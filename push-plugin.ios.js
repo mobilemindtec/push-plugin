@@ -9,10 +9,10 @@ module.exports = (function() {
 
     (function() {
         if (!pushHandler) {
-            pushHandler = Push.alloc().init();
-            pushManager = PushManager.alloc().init();
-            defaultCenter = utils.ios.getter(NSNotificationCenter, NSNotificationCenter.defaultCenter);
-            mainQueue = utils.ios.getter(NSOperationQueue, NSOperationQueue.mainQueue);
+            pushHandler = Push.alloc().init()
+            pushManager = PushManager.alloc().init()
+            defaultCenter = NSNotificationCenter.defaultCenter
+            mainQueue = NSOperationQueue.mainQueue
         }
     })();
 
