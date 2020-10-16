@@ -1,0 +1,4 @@
+module PushPlugin {
+  umbrella "../../../../../platforms/ios/Pods/Headers/Public"
+  export *
+}
