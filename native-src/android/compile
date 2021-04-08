@@ -1,5 +1,13 @@
 #!/bin/bash
 
+#export JAVA_OPTS="-Dcom.sun.jndi.ldap.object.disableEndpointIdentification=true \
+#        -Dcom.sun.net.ssl.checkRevocation=false \
+#        -Dhttps.protocols=TLSv1.2 \
+#        -Dmaven.wagon.http.ssl.insecure=true \
+#        -Dmaven.wagon.http.ssl.allowall=true \
+#        -Djavax.net.ssl.trustStore=/opt/jdk/java-se-8u41-ri/jre/lib/security/cacerts"
+
+
 ./gradlew clean exportJar
 
 cp app/build/outputs/aar/app-release.aar ../../platforms/android/pushplugin.aar
