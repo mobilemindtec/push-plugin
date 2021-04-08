@@ -1,4 +1,4 @@
-import {* as utils} from "@nativescript/core/utils/utils"
+var utils = require("@nativescript/core/utils/utils")
 
 module.exports = (function() {
 
