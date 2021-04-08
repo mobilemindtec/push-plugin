@@ -1,5 +1,5 @@
 module.exports = (function () {
-    var app = require('application');
+    var app = require('@nativescript/core/application');
     var context = app.android.context;
 
     (function() {

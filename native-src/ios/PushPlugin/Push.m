@@ -110,8 +110,15 @@ static char launchNotificationKey;
 
 - (void)didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
+
+    NSMutableString * str = [NSMutableString string];
+    for (int i = 0; i<sizeof(deviceToken); i++)
+    {
+        [str appendFormat:@"%d ", deviceToken[i]];
+    }
+
     NSMutableDictionary *results = [NSMutableDictionary dictionary];
-    NSString *token = [[[[deviceToken description] stringByReplacingOccurrencesOfString:@"<"withString:@""]
+    NSString *token = [[[str stringByReplacingOccurrencesOfString:@"<"withString:@""]
                         stringByReplacingOccurrencesOfString:@">" withString:@""]
                        stringByReplacingOccurrencesOfString: @" " withString: @""];
     [results setValue:token forKey:@"deviceToken"];
