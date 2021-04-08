@@ -7,6 +7,6 @@ android {
 }
 
 dependencies {
-  implementation 'com.google.firebase:firebase-core:16.0.8'
-  implementation 'com.google.firebase:firebase-messaging:17.4.0'
+  //implementation 'com.google.firebase:firebase-core:16.0.8'
+  implementation 'com.google.firebase:firebase-messaging:21.0.1'
 }
